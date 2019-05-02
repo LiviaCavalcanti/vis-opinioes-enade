@@ -53,8 +53,14 @@ total_concluintes <- respostas %>%
     group_by(UF) %>%
     summarize(total_concluintes=sum(n), media_UF=(mean(media)))
 
-merge(total_concluintes, criterios, by="UF")
+merge(total_concluintes, criterios, by="UF") %>%
+  ggplot(aes(media_UF, total_concluintes)) +
+  geom_point() +
+  scale_y_log10()
     
+p<-merge(total_concluintes, criterios, by="UF") 
+
+cor(p$total_concluintes, p$media_UF, method = "spearman")
     
     #    ggplot(aes(x = UF, y = media)) + 
     #geom_col() + 
