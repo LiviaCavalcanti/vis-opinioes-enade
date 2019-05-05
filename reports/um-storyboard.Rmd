@@ -73,3 +73,32 @@ cursos %>%
 *** 
 
 Mais um comentário
+
+### Parte 4
+
+```{r}
+library(plotly)
+total_concluintes <- respostas %>% 
+  mutate(ponderando_pergunta = n*media) %>%
+    group_by(enunciado) %>%
+    summarize(concluintes=sum(n), media_pergunta=sum(ponderando_pergunta)/concluintes) %>%
+  slice(1:20)
+
+menor_media = respostas %>% 
+    group_by(enunciado) %>%
+    filter(media == min(media)) 
+
+p <- merge(total_concluintes, menor_media, by = "enunciado") %>%
+  ggplot(aes(x=media_pergunta, y=reorder(enunciado, -media_pergunta), color = media_pergunta)) +
+    geom_point(aes(text=sprintf("Instituição com menor média: %s<br>Média: %.3f", IES, media)), size=5) +
+      scale_colour_distiller(palette = "BuPu") + 
+      labs( x = "Média", color = "Média", title="O que foi reclamado por mais estudantes?") + 
+        theme(axis.title.y = element_blank(), 
+              panel.background = element_rect(fill = "#e3cfd3", colour = "darkblue")) 
+
+ggplotly(p) 
+```
+
+*** 
+
+Mais um comentário
